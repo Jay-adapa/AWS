@@ -1050,4 +1050,301 @@ I rewrote everything in a **simple structured format**, removing confusion while
 
 ---
 
+
 _________________________________________________
+JENKINS PIPELINE (GENERAL CONFIGURATION)
+
+(Simple & Clean for Exams)
+
+1. Description
+
+In this section, we enter a brief explanation about the project.
+Example:
+“This project demonstrates automated build, test, and package using Jenkins Pipeline.”
+
+2. Build Triggers
+
+In this section, we can select triggers such as:
+
+Build periodically
+* * * * *
+
+(Choose based on requirement.)
+
+3. Advanced Project Options
+
+Under this section:
+
+Go to Definition
+
+Select Pipeline Script
+
+This enables us to write a full scripted pipeline directly inside Jenkins.
+
+4. Pipeline Script Section
+
+pipeline {
+    agent any
+    tools{
+        jdk 'JAVA_HOME'
+        maven 'MAVEN_HOME'
+    }
+    stages {
+        stage('git repo & clean') {
+            steps {
+                bat "rmdir /s /q Harshitha_Jenkins_Maven || exit 0"
+                bat "git clone https://github.com/Harshitha-Macha/Harshitha_Jenkins_Maven.git"
+                bat "mvn clean -f Harshitha_Jenkins_Maven/pom.xml"
+            }
+        }
+        stage('install') {
+            steps {
+                bat "mvn install -f Harshitha_Jenkins_Maven/pom.xml" 
+            }
+        }
+        stage('test') {
+            steps {
+                bat "mvn test -f Harshitha_Jenkins_Maven/pom.xml"
+            }
+        }
+        stage('package') {
+            steps {
+                bat "mvn package -f Harshitha_Jenkins_Maven/pom.xml"
+            }
+        }
+    }
+}
+5. Save Configuration
+
+_______
+DEPLOYMENT OF index.html USING EC2 INSTANCE IN AWS
+Step 1: Login to AWS / Canvas Account
+
+Open the Course Invitation Mail → click Start.
+
+AWS Academy opens → Select Student Login → enter email & password.
+
+Click Modules.
+
+Scroll down → select Launch AWS Academy Lab.
+
+Click Start Lab and wait until the AWS icon turns Red → Green.
+
+Click AWS to enter the console.
+
+Step 2: Create an EC2 Instance
+
+In the AWS Console → search for EC2 → click it.
+
+Click Launch Instance.
+
+Stage 1: Name
+
+Give instance name: ubuntu.
+
+Stage 2: Select AMI
+
+Select Ubuntu Server (Free Tier Eligible).
+
+Stage 3: Architecture
+
+Ensure 64-bit (x86) is selected.
+
+Stage 4: Instance Type
+
+Choose t2.micro (1 CPU, 1 GB RAM, free tier).
+
+Stage 5: Create Key Pair
+
+Click Create New Key Pair.
+
+Enter keypair name.
+
+Download the .pem file.
+
+Save it safely (example: Desktop → AWS folder).
+
+Stage 6: Network Settings – Security Group
+
+Enable:
+
+HTTP (80)
+
+HTTPS (443)
+
+SSH (22)
+
+(These are required to access the webpage.)
+
+Stage 7: Storage
+
+Default storage: 8 GB (root volume).
+
+Stage 8: Launch
+
+Click Launch Instance.
+
+Go to Instances page.
+
+Wait until instance shows:
+
+Running
+
+Status Checks = 2/2 passed
+
+Connect
+
+Tick the instance → click Connect → open SSH Client tab.
+
+Copy the ssh -i command for later use.
+
+Step 3: Connect Local System to EC2 (SSH)
+Step a:
+
+Copy the path where the .pem file is saved.
+Example: D:\SUNNY\SELABWEB\AWS
+
+Step b:
+
+Open PowerShell (Run as Administrator).
+Navigate to the key file path:
+
+cd <path>
+
+Step c:
+
+From AWS, copy the SSH command under “SSH Client”.
+
+Step d:
+
+Paste and run the SSH command in PowerShell:
+
+ssh -i "<keypair>.pem" ubuntu@<public-ip>
+
+Step 4: Install Required Software in Ubuntu
+
+Run the following commands:
+
+Update packages
+sudo apt update
+
+Install Docker
+sudo apt-get install docker.io
+
+Install Git
+sudo apt install git
+
+Install Nano (Text Editor)
+sudo apt install nano
+
+Step 5: Create Web Application and Push to GitHub
+Step a:
+
+Create an index.html file (Example folder).
+
+Step b:
+
+Open Git Bash in that folder.
+
+Step c:
+
+Initialize Git:
+
+git init
+git add .
+git commit -m "first commit"
+
+Step d:
+
+Create a new GitHub repository (example: AWS).
+
+Step e:
+
+Run commands (copied from GitHub):
+
+git branch -M main
+git remote add origin <https-url>
+git push -u origin main
+
+Step f:
+
+Refresh GitHub → confirm index.html uploaded.
+
+Step 6: Clone Repository in EC2 Server
+Step g:
+
+Copy the repository HTTPS link.
+
+Step h:
+
+Clone it inside EC2:
+
+git clone <repository-url>
+
+Step i:
+
+Navigate into folder:
+
+cd AWS
+ls
+
+Step 7: Create Dockerfile and Build Image
+Step j:
+
+Create Dockerfile:
+
+nano Dockerfile
+
+Step k:
+
+Add the following content:
+
+FROM nginx:latest
+COPY . /usr/share/nginx/html
+
+
+Save:
+
+Ctrl + O → Enter
+
+Ctrl + X (exit)
+
+Step L: Build Docker Image
+sudo docker build -t mywebapp .
+
+Step m: Run Docker Container
+sudo docker run -d -p 80:80 mywebapp
+
+Step 8: Test the Deployment
+Step n:
+
+Open EC2 → Instances.
+
+Step o:
+
+Copy Public IPv4 Address.
+
+Step p:
+
+Open a browser → paste the IP:
+
+http://<public-ip>
+
+
+If HTTPS doesn’t work, use HTTP.
+The index.html page should load.
+
+Step 9: Stop and Terminate Resources
+Step Q: Stop Container
+sudo docker ps
+sudo docker stop <container-id>
+
+Terminate EC2 Instance
+
+Go to Instances
+
+Click Instance State → Terminate
+
+End Lab
+
+Click End Lab in AWS Academy.
