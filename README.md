@@ -846,4 +846,208 @@ docker logout
 ---
 
 ------------------------------------------------------------------------------------------------------
+Here is a **clean, exam-ready, easy-to-remember** version of the steps you provided.
+I rewrote everything in a **simple structured format**, removing confusion while keeping all important points.
 
+---
+
+# ✅ **Maven Java Automation — Jenkins Steps (Clean Notes for Exam)**
+
+---
+
+## **Step 1: Open Jenkins**
+
+* Open browser → `localhost:8080`
+* Click **New Item** → choose **Freestyle Project**
+* Enter name: **MavenJava_Build**
+* Click **OK**
+
+---
+
+## **Step 2: Configure MavenJava_Build**
+
+### **Project Setup**
+
+* **Description:** Java Build demo
+* **Source Code Management (SCM):**
+
+  * Git Repo URL → *Git Maven Java Project URL*
+  * Branch → */main* or */master*
+
+### **Build Steps**
+
+1. **Invoke top-level Maven targets**
+
+   * Maven Version: **MAVEN_HOME**
+   * Goals: **clean**
+
+2. **Invoke top-level Maven targets**
+
+   * Maven Version: **MAVEN_HOME**
+   * Goals: **install**
+
+### **Post-build Actions**
+
+* **Archive artifacts**
+
+  * Files: `**/*`
+* **Build other projects**
+
+  * Next Project: **MavenJava_Test**
+  * Trigger: **Only if build is stable**
+* Click **Apply** → **Save**
+
+---
+
+## **Step 3: Create MavenJava_Test Project**
+
+* New Item → **MavenJava_Test**
+* Click **OK**
+
+### **Configure MavenJava_Test**
+
+* **Description:** Test demo
+* **Build Environment:**
+
+  * Tick → *Delete workspace before build starts*
+
+### **Build Steps**
+
+1. **Copy artifacts from another project**
+
+   * From project: **MavenJava_Build**
+   * Build: *Stable build only*
+   * Artifacts: `**/*`
+
+2. **Invoke top-level Maven targets**
+
+   * Maven Version: **MAVEN_HOME**
+   * Goals: **test**
+
+### **Post-build Actions**
+
+* Archive artifacts → `**/*`
+* Save
+
+---
+
+## **Step 4: Create Pipeline View**
+
+* Dashboard → click **+** beside "All"
+* View name: **MavenJava_Pipeline**
+* Select **Build Pipeline View**
+* **Initial job:** MavenJava_Build
+* Save
+
+---
+
+## **Step 5: Run Pipeline**
+
+* Click **Run** icon
+* Open console (black box) → check logs
+* If both builds → green color → pipeline successful
+
+---
+
+# ✅ **Maven Web Automation — Jenkins Steps (Clean Notes)**
+
+---
+
+## **Step 1: Create MavenWeb_Build**
+
+* New Item → **MavenWeb_Build**
+* Description: Web Build demo
+* SCM:
+
+  * Git URL: *Git Maven Web repo URL*
+  * Branch: */main* or */master*
+
+### **Build Steps**
+
+* Maven → clean
+* Maven → install
+
+### **Post-build Actions**
+
+* Archive artifacts → `**/*`
+* Build other projects → **MavenWeb_Test**
+
+  * Trigger: Only if stable
+* Save
+
+---
+
+## **Step 2: Create MavenWeb_Test**
+
+* Description: Test demo
+* Build Environment: Delete workspace before build
+
+### **Build Steps**
+
+1. Copy Artifacts
+
+   * From project: **MavenWeb_Build**
+   * Stable build only
+   * Artifacts: `**/*`
+
+2. Maven Goals → **test**
+
+### **Post-Build**
+
+* Archive artifacts → `**/*`
+* Build other projects → **MavenWeb_Deploy**
+* Save
+
+---
+
+## **Step 3: Create MavenWeb_Deploy**
+
+* Description: Web Code Deployment
+* Build Environment → Delete workspace before build
+
+### **Build Steps**
+
+* Copy artifacts
+
+  * From: MavenWeb_Test
+  * Stable build only
+  * Artifacts: `**/*`
+
+### **Post-build Actions**
+
+* Deploy WAR/EAR to Container
+
+  * WAR File: `**/*.war`
+  * Context path: **webpath**
+  * Add container: **Tomcat 9.x Remote**
+
+    * Username: admin
+    * Password: 1234
+    * Tomcat URL: `http://localhost:8085/`
+
+* Save
+
+---
+
+## **Step 4: Create Pipeline View**
+
+* Dashboard → "+"
+* View name: **MavenWeb_Pipeline**
+* Select: **Build Pipeline View**
+* Initial Job → MavenWeb_Build
+* Save
+
+---
+
+## **Step 5: Run & Verify**
+
+* Click **Run**
+* Check green status
+* Open Tomcat → `http://localhost:8085/`
+* Open `/webpath`
+* Enter Tomcat credentials
+* Application should load
+
+---
+
+_________________________________________________
